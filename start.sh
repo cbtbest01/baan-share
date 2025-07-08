@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
-export PATH=$HOME/.local/bin:$PATH
+
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
 python -m gunicorn app:app
