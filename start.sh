@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-gunicorn app:app
+export PATH=$HOME/.local/bin:$PATH
+python -m gunicorn app:app
