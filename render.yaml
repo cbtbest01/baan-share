@@ -2,5 +2,5 @@ services:
   - type: web
     name: baan-share
     runtime: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python -m gunicorn app:app
+    buildCommand: ""
+    startCommand: ./start.sh
