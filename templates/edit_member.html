@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}แก้ไขสมาชิก{% endblock %}
+{% block content %}
+  <h2 class="mb-4">🛠️ แก้ไขชื่อสมาชิก</h2>
+  <form method="POST" style="max-width: 400px;">
+    <div class="mb-3">
+      <label class="form-label">ชื่อใหม่</label>
+      <input type="text" name="name" value="{{ member.name }}" class="form-control" required>
+    </div>
+    <button class="btn btn-primary">💾 บันทึก</button>
+    <a href="/members" class="btn btn-secondary ms-2">↩️ ย้อนกลับ</a>
+  </form>
+{% endblock %}

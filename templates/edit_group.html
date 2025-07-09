@@ -1,28 +1,47 @@
 {% extends "base.html" %}
-{% block title %}แก้ไขวงแชร์ | บ้านแชร์{% endblock %}
+{% block title %}แก้ไขวงแชร์{% endblock %}
 {% block content %}
-  <h2 class="mb-3">🛠️ แก้ไขวงแชร์</h2>
-  <form method="POST">
-    <div class="mb-3"><label>ชื่อวงแชร์</label>
-      <input type="text" name="name" class="form-control" value="{{ group.name }}" required></div>
-    <div class="mb-3"><label>จำนวนงวด</label>
-      <input type="number" name="rounds" class="form-control" value="{{ group.rounds }}" required></div>
-    <div class="mb-3"><label>ยอดเงินต่องวด</label>
-      <input type="number" name="amount" class="form-control" value="{{ group.amount_per_round }}" required></div>
-    <div class="mb-3"><label>วันที่เริ่มแชร์</label>
-      <input type="date" name="start_date" class="form-control" value="{{ group.start_date }}" required></div>
-    <div class="mb-3"><label>หมายเหตุ</label>
-      <textarea name="note" class="form-control">{{ group.note }}</textarea></div>
-    <div class="mb-3"><label>สมาชิกในวง</label><br>
-      {% for m in members %}
-        <div class="form-check form-check-inline">
-          <input type="checkbox" class="form-check-input" name="members" value="{{ m.id }}"
-                 id="mem{{ m.id }}" {% if m.id in current_ids %}checked{% endif %}>
-          <label class="form-check-label" for="mem{{ m.id }}">{{ m.name }}</label>
-        </div>
-      {% endfor %}
+  <h2 class="mb-4">🛠️ แก้ไขวงแชร์</h2>
+
+  <form method="POST" style="max-width: 600px;">
+    <div class="mb-3">
+      <label class="form-label">ชื่อวงแชร์</label>
+      <input type="text" name="name" class="form-control" value="{{ group.name }}" required>
     </div>
-    <button class="btn btn-primary">💾 บันทึก</button>
-    <a href="/groups" class="btn btn-secondary">↩️ ย้อนกลับ</a>
+
+    <div class="mb-3">
+      <label class="form-label">จำนวนงวด</label>
+      <input type="number" name="rounds" class="form-control" value="{{ group.rounds }}" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">จำนวนเงินต่องวด</label>
+      <input type="number" name="amount" class="form-control" value="{{ group.amount_per_round }}" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">วันเริ่ม</label>
+      <input type="date" name="start_date" class="form-control" value="{{ group.start_date }}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">หมายเหตุ</label>
+      <input type="text" name="note" class="form-control" value="{{ group.note }}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">เลือกสมาชิกในวง</label>
+      <div class="form-check">
+        {% for m in members %}
+          <label class="form-check-label me-3">
+            <input class="form-check-input" type="checkbox" name="members" value="{{ m.id }}"
+                   {% if m.id in current_ids %}checked{% endif %}> {{ m.name }}
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button class="btn btn-primary">💾 บันทึกการแก้ไข</button>
+    <a href="/groups" class="btn btn-secondary ms-2">↩️ กลับ</a>
   </form>
 {% endblock %}

@@ -1,27 +1,39 @@
 {% extends "base.html" %}
-{% block title %}บันทึกรายการใหม่ | บ้านแชร์แม่โบว์{% endblock %}
-
+{% block title %}เพิ่มรายการแชร์{% endblock %}
 {% block content %}
-  <h2 class="mb-4">➕ บันทึกรายการแชร์</h2>
+  <h2 class="mb-4">➕ เพิ่มรายการแชร์</h2>
 
-  <form method="POST" action="/add" class="mx-auto" style="max-width: 480px;">
+  <form method="POST" style="max-width: 500px;">
     <div class="mb-3">
-      <label class="form-label">ชื่อสมาชิก</label>
-      <input type="text" name="member" class="form-control" required>
+      <label class="form-label">เลือกวงแชร์</label>
+      <select name="group" id="groupSelect" class="form-select" required>
+        <option value="">-- เลือกวงแชร์ --</option>
+        {% for g in groups %}
+          <option value="{{ g.id }}">{{ g.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">เลือกสมาชิกในวง</label>
+      <select name="member" id="memberSelect" class="form-select" required disabled>
+        <option value="">-- เลือกสมาชิก --</option>
+      </select>
     </div>
 
     <div class="mb-3">
       <label class="form-label">ประเภท</label>
       <select name="type" class="form-select" required>
-        <option value="">-- เลือก --</option>
-        <option value="income">รับเงิน (เช่น จ่ายงวด)</option>
-        <option value="expense">จ่ายเงิน (เช่น คืนเงิน)</option>
+        <option value="ส่งงวด">ส่งงวด</option>
+        <option value="รับแชร์">รับแชร์</option>
+        <option value="ถอนก่อน">ถอนก่อน</option>
+        <option value="ค้างจ่าย">ค้างจ่าย</option>
       </select>
     </div>
 
     <div class="mb-3">
-      <label class="form-label">จำนวนเงิน (บาท)</label>
-      <input type="number" name="amount" step="0.01" class="form-control" required>
+      <label class="form-label">จำนวนเงิน</label>
+      <input type="number" name="amount" class="form-control" required>
     </div>
 
     <div class="mb-3">
@@ -29,6 +41,36 @@
       <input type="text" name="note" class="form-control">
     </div>
 
-    <button type="submit" class="btn btn-success px-5">บันทึก</button>
+    <button class="btn btn-primary">💾 บันทึก</button>
+    <a href="/" class="btn btn-secondary ms-2">↩️ ย้อนกลับ</a>
   </form>
+
+  <script>
+    const groupSelect = document.getElementById("groupSelect");
+    const memberSelect = document.getElementById("memberSelect");
+
+    groupSelect.addEventListener("change", () => {
+      const groupId = groupSelect.value;
+      memberSelect.innerHTML = '<option>กำลังโหลด...</option>';
+      memberSelect.disabled = true;
+
+      if (groupId) {
+        fetch(`/members/by-group/${groupId}`)
+          .then(res => res.json())
+          .then(data => {
+            memberSelect.innerHTML = '<option value="">-- เลือกสมาชิก --</option>';
+            data.members.forEach(m => {
+              const opt = document.createElement("option");
+              opt.value = m.id;
+              opt.textContent = m.name;
+              memberSelect.appendChild(opt);
+            });
+            memberSelect.disabled = false;
+          });
+      } else {
+        memberSelect.innerHTML = '<option value="">-- เลือกสมาชิก --</option>';
+        memberSelect.disabled = true;
+      }
+    });
+  </script>
 {% endblock %}

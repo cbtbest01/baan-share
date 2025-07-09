@@ -1,24 +1,40 @@
 {% extends "base.html" %}
-{% block title %}วงแชร์ทั้งหมด | บ้านแชร์{% endblock %}
+{% block title %}วงแชร์ทั้งหมด{% endblock %}
 {% block content %}
-  <h2 class="mb-3">📁 รายการวงแชร์ทั้งหมด</h2>
+  <h2 class="mb-4">🌀 รายชื่อวงแชร์ทั้งหมด</h2>
+
   <a href="/groups/new" class="btn btn-success mb-3">➕ สร้างวงแชร์ใหม่</a>
-  <table class="table table-bordered">
-    <thead><tr><th>ชื่อ</th><th>จำนวนงวด</th><th>ยอด/งวด</th><th>เริ่มแชร์</th><th>จัดการ</th></tr></thead>
-    <tbody>
-      {% for g in groups %}
-      <tr>
-        <td>{{ g.name }}</td>
-        <td>{{ g.rounds }}</td>
-        <td>{{ g.amount_per_round }}</td>
-        <td>{{ g.start_date }}</td>
-        <td>
-          <a href="/groups/edit/{{ g.id }}" class="btn btn-sm btn-warning">แก้ไข</a>
-          <a href="/groups/delete/{{ g.id }}" class="btn btn-sm btn-danger"
-             onclick="return confirm('ลบวงแชร์นี้หรือไม่?')">ลบ</a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+
+  {% if groups %}
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ชื่อวงแชร์</th>
+          <th>จำนวนงวด</th>
+          <th>จำนวนต่องวด</th>
+          <th>วันเริ่ม</th>
+          <th>หมายเหตุ</th>
+          <th>จัดการ</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for g in groups %}
+          <tr>
+            <td><a href="/groups/{{ g.id }}">{{ g.name }}</a></td>
+            <td>{{ g.rounds }}</td>
+            <td>{{ "{:,.2f}".format(g.amount_per_round or 0) }}</td>
+            <td>{{ format_thai_datetime(g.start_date) }}</td>
+            <td>{{ g.note or "-" }}</td>
+            <td>
+              <a href="/groups/edit/{{ g.id }}" class="btn btn-sm btn-warning">แก้ไข</a>
+              <a href="/groups/delete/{{ g.id }}" class="btn btn-sm btn-danger"
+                 onclick="return confirm('ลบวงแชร์นี้หรือไม่?')">ลบ</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>ยังไม่มีวงแชร์ในระบบ</p>
+  {% endif %}
 {% endblock %}

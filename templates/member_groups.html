@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}วงแชร์ของ {{ member.name }}{% endblock %}
+{% block content %}
+  <h2 class="mb-4">🧑‍🤝‍🧑 วงแชร์ที่ {{ member.name }} เล่นอยู่</h2>
+
+  {% if groups %}
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ชื่อวงแชร์</th>
+          <th>จำนวนงวด</th>
+          <th>จำนวนต่องวด</th>
+          <th>วันเริ่ม</th>
+          <th>หมายเหตุ</th>
+          <th>ยอดที่จ่ายแล้ว</th>
+          <th>ยอดที่ต้องจ่าย</th>
+          <th>เหลืออีก</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for g in groups %}
+          <tr>
+            <td>
+              <a href="/members/{{ member.id }}/groups/{{ g.id }}/entries">
+                {{ g.name }}
+              </a>
+            </td>
+            <td>{{ g.rounds }}</td>
+            <td>{{ "{:,.2f}".format(g.amount_per_round or 0) }}</td>
+            <td>{{ g.start_date }}</td>
+            <td>{{ g.note }}</td>
+            <td>{{ "{:,.2f}".format(g.paid_amount or 0) }}</td>
+            <td>{{ "{:,.2f}".format((g.amount_per_round or 0) * (g.rounds or 0)) }}</td>
+            <td>{{ "{:,.2f}".format(((g.amount_per_round or 0)*(g.rounds or 0)) - (g.paid_amount or 0)) }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>สมาชิกนี้ยังไม่ได้เข้าวงแชร์ใด ๆ</p>
+  {% endif %}
+
+  <a href="/members" class="btn btn-secondary mt-3">↩️ กลับ</a>
+{% endblock %}

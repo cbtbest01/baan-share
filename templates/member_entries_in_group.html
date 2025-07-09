@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}รายการแชร์ของ {{ member.name }}{% endblock %}
+{% block content %}
+  <h2 class="mb-4">📋 รายการของ {{ member.name }} ใน "{{ group.name }}"</h2>
+
+  {% if entries %}
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>วันที่</th>
+          <th>ประเภท</th>
+          <th>จำนวนเงิน</th>
+          <th>หมายเหตุ</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in entries %}
+          <tr>
+            <td>{{ format_thai_datetime(e.created_at) }}</td>
+            <td>{{ e.type }}</td>
+            <td>{{ "{:,.2f}".format(e.amount) }}</td>
+            <td>{{ e.note }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>ยังไม่มีรายการแชร์ในวงนี้สำหรับสมาชิกนี้</p>
+  {% endif %}
+
+  <a href="/members/{{ member.id }}/groups" class="btn btn-secondary mt-3">↩️ กลับ</a>
+{% endblock %}

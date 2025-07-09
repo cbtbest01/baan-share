@@ -3,7 +3,7 @@ import sqlite3
 conn = sqlite3.connect('members.db')
 c = conn.cursor()
 
-# ตารางวงแชร์
+# วงแชร์
 c.execute('''
 CREATE TABLE IF NOT EXISTS groups (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS groups (
 )
 ''')
 
-# ตารางเชื่อม สมาชิก <-> วงแชร์
+# ความสัมพันธ์ สมาชิก ↔ วงแชร์
 c.execute('''
 CREATE TABLE IF NOT EXISTS member_groups (
     member_id INTEGER,

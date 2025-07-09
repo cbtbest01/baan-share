@@ -1,6 +1,44 @@
 {% extends "base.html" %}
-{% block title %}บาลานซ์บวกลบ | บ้านแชร์{% endblock %}
+{% block title %}รายงานยอดรวมสมาชิก{% endblock %}
 {% block content %}
-  <h2 class="mb-3">📉 รายงานบาลานซ์บวกลบ</h2>
-  <p class="text-muted">ฟีเจอร์กำลังพัฒนา...</p>
+  <h2 class="mb-4">📊 รายงานยอดรวมสมาชิก</h2>
+
+  <form method="GET" class="row g-3 mb-4">
+    <div class="col-auto">
+      <label class="form-label">วันที่เริ่มต้น</label>
+      <input type="date" name="start_date" class="form-control" value="{{ start_date }}">
+    </div>
+    <div class="col-auto">
+      <label class="form-label">วันที่สิ้นสุด</label>
+      <input type="date" name="end_date" class="form-control" value="{{ end_date }}">
+    </div>
+    <div class="col-auto d-flex align-items-end">
+      <button class="btn btn-primary">📅 กรองช่วงเวลา</button>
+      <a href="/report/balance" class="btn btn-secondary ms-2">รีเซ็ต</a>
+    </div>
+  </form>
+
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>วงแชร์</th>
+        <th>สมาชิก</th>
+        <th>จำนวนรายการ</th>
+        <th>ยอดรวมทั้งหมด</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+        <tr>
+          <td>{{ row.group_name }}</td>
+          <td>{{ row.member_name }}</td>
+          <td>{{ row.entry_count }}</td>
+          <td>{{ "{:,.2f}".format(row.total_amount or 0) }}</td>
+        </tr>
+      {% endfor %}
+      {% if not rows %}
+        <tr><td colspan="4" class="text-center">ไม่มีข้อมูลในช่วงเวลานี้</td></tr>
+      {% endif %}
+    </tbody>
+  </table>
 {% endblock %}

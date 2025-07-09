@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}รายละเอียด "{{ group.name }}"{% endblock %}
+{% block content %}
+  <h2 class="mb-4">🔍 รายละเอียดวงแชร์ "{{ group.name }}"</h2>
+
+  <div class="mb-3">
+    <strong>จำนวนงวด:</strong> {{ group.rounds }}<br>
+    <strong>จำนวนต่องวด:</strong> {{ "{:,.2f}".format(group.amount_per_round) }} บาท<br>
+    <strong>วันเริ่ม:</strong> {{ group.start_date }}<br>
+    <strong>หมายเหตุ:</strong> {{ group.note or '-' }}
+  </div>
+
+  <h4>👥 สมาชิกในวงนี้</h4>
+  {% if members %}
+    <table class="table table-sm table-bordered">
+      <thead><tr><th>ชื่อสมาชิก</th><th>ยอดที่จ่ายรวม</th></tr></thead>
+      <tbody>
+        {% for m in members %}
+          <tr>
+            <td>{{ m.name }}</td>
+            <td>{{ "{:,.2f}".format(m.total_paid or 0) }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>ยังไม่มีสมาชิกในวงนี้</p>
+  {% endif %}
+
+  <h4 class="mt-4">🧾 รายการแชร์ทั้งหมด</h4>
+  {% if entries %}
+    <table class="table table-sm table-bordered">
+      <thead><tr><th>วันที่</th><th>สมาชิก</th><th>ประเภท</th><th>จำนวน</th><th>หมายเหตุ</th></tr></thead>
+      <tbody>
+        {% for e in entries %}
+          <tr>
+            <td>{{ e.created_at }}</td>
+            <td>{{ e.member_name }}</td>
+            <td>{{ e.type }}</td>
+            <td>{{ "{:,.2f}".format(e.amount) }}</td>
+            <td>{{ e.note }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>ยังไม่มีรายการในวงนี้</p>
+  {% endif %}
+
+  <a href="/groups" class="btn btn-secondary mt-3">↩️ กลับหน้าวงแชร์</a>
+{% endblock %}
