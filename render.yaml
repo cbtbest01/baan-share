@@ -3,4 +3,4 @@ services:
     name: baan-share
     runtime: python
     buildCommand: ""
-    startCommand: ./start.sh
+    startCommand: python -m gunicorn app:app
