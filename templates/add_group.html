@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}สร้างวงแชร์ | บ้านแชร์{% endblock %}
+{% block content %}
+  <h2 class="mb-3">➕ สร้างวงแชร์ใหม่</h2>
+  <form method="POST">
+    <div class="mb-3"><label>ชื่อวงแชร์</label><input type="text" name="name" class="form-control" required></div>
+    <div class="mb-3"><label>จำนวนงวด</label><input type="number" name="rounds" class="form-control" required></div>
+    <div class="mb-3"><label>ยอดเงินต่องวด</label><input type="number" name="amount" class="form-control" required></div>
+    <div class="mb-3"><label>วันที่เริ่มแชร์</label><input type="date" name="start_date" class="form-control" required></div>
+    <div class="mb-3"><label>หมายเหตุ</label><textarea name="note" class="form-control"></textarea></div>
+    <div class="mb-3"><label>สมาชิกในวง</label><br>
+      {% for m in members %}
+        <div class="form-check form-check-inline">
+          <input type="checkbox" class="form-check-input" name="members" value="{{ m.id }}" id="mem{{ m.id }}">
+          <label class="form-check-label" for="mem{{ m.id }}">{{ m.name }}</label>
+        </div>
+      {% endfor %}
+    </div>
+    <button class="btn btn-primary">💾 สร้างวงแชร์</button>
+    <a href="/groups" class="btn btn-secondary">↩️ ย้อนกลับ</a>
+  </form>
+{% endblock %}

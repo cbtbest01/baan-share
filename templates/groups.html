@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}วงแชร์ทั้งหมด | บ้านแชร์{% endblock %}
+{% block content %}
+  <h2 class="mb-3">📁 รายการวงแชร์ทั้งหมด</h2>
+  <a href="/groups/new" class="btn btn-success mb-3">➕ สร้างวงแชร์ใหม่</a>
+  <table class="table table-bordered">
+    <thead><tr><th>ชื่อ</th><th>จำนวนงวด</th><th>ยอด/งวด</th><th>เริ่มแชร์</th><th>จัดการ</th></tr></thead>
+    <tbody>
+      {% for g in groups %}
+      <tr>
+        <td>{{ g.name }}</td>
+        <td>{{ g.rounds }}</td>
+        <td>{{ g.amount_per_round }}</td>
+        <td>{{ g.start_date }}</td>
+        <td>
+          <a href="/groups/edit/{{ g.id }}" class="btn btn-sm btn-warning">แก้ไข</a>
+          <a href="/groups/delete/{{ g.id }}" class="btn btn-sm btn-danger"
+             onclick="return confirm('ลบวงแชร์นี้หรือไม่?')">ลบ</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

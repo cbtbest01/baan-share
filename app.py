@@ -153,3 +153,86 @@ def report_balance():
 @login_required
 def report_outstanding():
     return render_template("report_outstanding.html", year=datetime.now().year)
+@app.route("/groups")
+@login_required
+def groups():
+    conn = get_db_connection()
+    groups = conn.execute("SELECT * FROM groups").fetchall()
+    conn.close()
+    return render_template("groups.html", groups=groups, year=datetime.now().year)
+
+@app.route("/groups/new", methods=["GET", "POST"])
+@login_required
+def add_group():
+    conn = get_db_connection()
+    if request.method == "POST":
+        name = request.form["name"]
+        rounds = request.form["rounds"]
+        amount = request.form["amount"]
+        start_date = request.form["start_date"]
+        note = request.form["note"]
+        members = request.form.getlist("members")  # checkbox list
+
+        cur = conn.cursor()
+        cur.execute("""
+            INSERT INTO groups (name, rounds, amount_per_round, start_date, note)
+            VALUES (?, ?, ?, ?, ?)
+        """, (name, rounds, amount, start_date, note))
+        group_id = cur.lastrowid
+
+        for m_id in members:
+            cur.execute("INSERT INTO member_groups (member_id, group_id) VALUES (?, ?)", (m_id, group_id))
+
+        conn.commit()
+        conn.close()
+        flash("สร้างวงแชร์ใหม่แล้ว 🎉")
+        return redirect("/groups")
+
+    all_members = conn.execute("SELECT * FROM members").fetchall()
+    conn.close()
+    return render_template("add_group.html", members=all_members, year=datetime.now().year)
+
+@app.route("/groups/edit/<int:id>", methods=["GET", "POST"])
+@login_required
+def edit_group(id):
+    conn = get_db_connection()
+    if request.method == "POST":
+        name = request.form["name"]
+        rounds = request.form["rounds"]
+        amount = request.form["amount"]
+        start_date = request.form["start_date"]
+        note = request.form["note"]
+        selected_members = request.form.getlist("members")
+
+        conn.execute("""
+            UPDATE groups
+            SET name=?, rounds=?, amount_per_round=?, start_date=?, note=?
+            WHERE id=?
+        """, (name, rounds, amount, start_date, note, id))
+
+        conn.execute("DELETE FROM member_groups WHERE group_id = ?", (id,))
+        for m_id in selected_members:
+            conn.execute("INSERT INTO member_groups (member_id, group_id) VALUES (?, ?)", (m_id, id))
+
+        conn.commit()
+        conn.close()
+        flash("อัปเดตวงแชร์เรียบร้อย 🛠️")
+        return redirect("/groups")
+
+    group = conn.execute("SELECT * FROM groups WHERE id=?", (id,)).fetchone()
+    members = conn.execute("SELECT * FROM members").fetchall()
+    current = conn.execute("SELECT member_id FROM member_groups WHERE group_id=?", (id,)).fetchall()
+    current_ids = [row["member_id"] for row in current]
+    conn.close()
+    return render_template("edit_group.html", group=group, members=members, current_ids=current_ids, year=datetime.now().year)
+
+@app.route("/groups/delete/<int:id>")
+@login_required
+def delete_group(id):
+    conn = get_db_connection()
+    conn.execute("DELETE FROM member_groups WHERE group_id = ?", (id,))
+    conn.execute("DELETE FROM groups WHERE id = ?", (id,))
+    conn.commit()
+    conn.close()
+    flash("ลบวงแชร์เรียบร้อยแล้ว ❌")
+    return redirect("/groups")
