@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}สมาชิกบ้านแชร์{% endblock %}
+{% block content %}
+  <h2 class="mb-3">👥 จัดการสมาชิกบ้านแชร์</h2>
+
+  <form method="POST" class="d-flex mb-4">
+    <input name="name" class="form-control me-2" placeholder="ชื่อสมาชิกใหม่" required>
+    <button class="btn btn-primary">➕ เพิ่ม</button>
+  </form>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr><th>ชื่อ</th><th style="width: 120px;">จัดการ</th></tr>
+    </thead>
+    <tbody>
+      {% for m in members %}
+        <tr>
+          <td>{{ m.name }}</td>
+          <td>
+            <a href="/members/edit/{{ m.id }}" class="btn btn-sm btn-warning">แก้ไข</a>
+            <a href="/members/delete/{{ m.id }}" class="btn btn-sm btn-danger"
+               onclick="return confirm('ลบสมาชิกนี้หรือไม่?')">ลบ</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
