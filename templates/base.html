@@ -10,6 +10,13 @@
   <!-- 🧭 Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
+	{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert alert-success">
+      {{ messages[0] }}
+    </div>
+  {% endif %}
+{% endwith %}
       <a class="navbar-brand" href="/">บ้านแชร์แม่โบว์</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
         <span class="navbar-toggler-icon"></span>

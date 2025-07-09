@@ -8,9 +8,21 @@ def home():
     return render_template("home.html", year=datetime.now().year)
 
 # พร้อม route อื่น ๆ ในอนาคต
-@app.route("/add")
+@app.route('/add', methods=['GET', 'POST'])
 def add():
-    return "<h2>ฟอร์มบันทึกรายการ (กำลังพัฒนา)</h2>"
+    if request.method == 'POST':
+        member = request.form['member']
+        entry_type = request.form['type']
+        amount = request.form['amount']
+        note = request.form['note']
+
+        # 🔒 ตอนนี้ยังไม่บันทึกลงฐานข้อมูล แต่จะแสดงข้อความ
+        flash(f'บันทึกสำเร็จ: {member} - {entry_type} {amount} บาท')
+
+        return redirect('/add')
+
+    return render_template('add.html', year=datetime.now().year)
+
 
 @app.route("/summary")
 def summary():
