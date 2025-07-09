@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8">
-  <title>บ้านแชร์แม่โบว์</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-</head>
-<body class="bg-light text-center py-5">
-  <div class="container">
-    <h1 class="display-4 mb-4">บ้านแชร์แม่โบว์ 💰🏠</h1>
-    <p class="lead text-muted">ระบบจัดการเงินกลุ่มที่เข้าใจง่าย ใช้งานสะดวกสำหรับทุกคน</p>
+{% extends "base.html" %}
 
-    <div class="mt-5">
-      <a href="/add" class="btn btn-primary btn-lg px-5">บันทึกรายการแชร์</a>
-      <a href="/summary" class="btn btn-outline-secondary btn-lg px-5 ms-3">ดูรายการย้อนหลัง</a>
-    </div>
+{% block title %}หน้าแรก | บ้านแชร์แม่โบว์{% endblock %}
 
-    <footer class="mt-5 text-muted small">
-      &copy; {{ year }} พัฒนาโดย best เพื่อชุมชน
-    </footer>
+{% block content %}
+  <h1 class="display-5 fw-bold text-primary mb-3">ยินดีต้อนรับสู่บ้านแชร์แม่โบว์ 💰</h1>
+  <p class="lead text-muted">ระบบจัดการเงินกลุ่มที่เข้าใจง่าย ใช้งานสะดวกสำหรับทุกคนในชุมชน</p>
+
+  <div class="mt-4">
+    <a href="/add" class="btn btn-success btn-lg px-4">➕ เพิ่มรายการใหม่</a>
+    <a href="/summary" class="btn btn-outline-secondary btn-lg px-4 ms-3">📋 ดูยอดย้อนหลัง</a>
   </div>
-</body>
-</html>
+
+  <div class="mt-5 alert alert-warning border-1">
+    <strong>💡 แจ้งเตือน:</strong> แม่โบว์สามารถดูรายงานสรุปของสมาชิกทั้งหมดได้ที่ <a href="/admin" class="alert-link">หน้าจัดการระบบ</a>
+  </div>
+{% endblock %}
